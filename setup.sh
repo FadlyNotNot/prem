@@ -2,8 +2,8 @@
 dateFromServer=$(curl -v --insecure --silent https://google.com/ 2>&1 | grep Date | sed -e 's/< Date: //')
 # BOT INFORMATION
 date=$(date -R | cut -d " " -f -5)
-export CHATID="-6524291406"
-export KEY="6524291406:AAHRxTRzLBeI2_qf4KrdWyNEFHO7JgTA6V8"
+export CHATID="-1001899398362"
+export KEY="6293396608:AAFR9MI4hz8Jfe7AVITf1ANVxOVUhe_lZmc"
 export TIME="10"
 export URL="https://api.telegram.org/bot$KEY/sendMessage"
 IP=$(wget -qO- ipinfo.io/ip);
@@ -36,7 +36,7 @@ BIRed='\033[1;91m'
 red='\e[1;31m'
 bo='\e[1m'
 red='\e[1;31m'
-green='\e[0;32m'
+green='\e[0;32'
 yell='\e[1;33m'
 tyblue='\e[1;36m'
 purple() { echo -e "\\033[35;1m${*}\\033[0m"; }
@@ -57,52 +57,67 @@ export BOLD="\e[1m"
 export WARNING="${RED}\e[5m"
 export UNDERLINE="\e[4m"
 
-BURIQ () {
-    curl -sS https://raw.githubusercontent.com/effatastore/taikucing/main/mek > /root/tmp
-    data=( `cat /root/tmp | grep -E "^### " | awk '{print $2}'` )
-    for user in "${data[@]}"
-    do
-    exp=( `grep -E "^### $user" "/root/tmp" | awk '{print $3}'` )
-    d1=(`date -d "$exp" +%s`)
-    d2=(`date -d "$biji" +%s`)
-    exp2=$(( (d1 - d2) / 86400 ))
-    if [[ "$exp2" -le "0" ]]; then
-    echo $user > /etc/.$user.ini
-    else
-    rm -f  /etc/.$user.ini > /dev/null 2>&1
-    fi
-    done
-    rm -f  /root/tmp
+ipsaya=$(wget -qO- ipinfo.io/ip)
+data_server=$(curl -v --insecure --silent https://google.com/ 2>&1 | grep Date | sed -e 's/< Date: //')
+date_list=$(date +"%Y-%m-%d" -d "$data_server")
+data_ip="https://raw.githubusercontent.com/FadlyNotNot/ipku/main/ipvps"
+checking_sc() {
+  useexp=$(wget -qO- $data_ip | grep $ipsaya | awk '{print $3}')
+  if [[ $date_list < $useexp ]]; then
+    echo -ne
+  else
+    echo -e "\033[1;93m────────────────────────────────────────────\033[0m"
+    echo -e "\033[42m          404 NOT FOUND AUTOSCRIPT          \033[0m"
+    echo -e "\033[1;93m────────────────────────────────────────────\033[0m"
+    echo -e ""
+    echo -e "            ${RED}PERMISSION DENIED !${NC}"
+    echo -e "   \033[0;33mYour VPS${NC} $ipsaya \033[0;33mHas been Banned${NC}"
+    echo -e "     \033[0;33mBuy access permissions for scripts${NC}"
+    echo -e "             \033[0;33mContact Admin :${NC}"
+    echo -e "      \033[0;36mTelegram${NC} t.me/fdlyvpn_ID"
+    echo -e "      ${GREEN}WhatsApp${NC} wa.me/6283160098834"
+    echo -e "\033[1;93m────────────────────────────────────────────\033[0m"
+    exit
+  fi
 }
-# https://raw.githubusercontent.com/effatastore/taikucing/main/mek 
-MYIP=$(curl -sS ipv4.icanhazip.com)
-Name=$(curl -sS https://raw.githubusercontent.com/effatastore/taikucing/main/mek | grep $MYIP | awk '{print $2}')
-echo $Name > /usr/local/etc/.$Name.ini
-CekOne=$(cat /usr/local/etc/.$Name.ini)
-
-Bloman () {
-if [ -f "/etc/.$Name.ini" ]; then
-CekTwo=$(cat /etc/.$Name.ini)
-    if [ "$CekOne" = "$CekTwo" ]; then
-        res="Expired"
-    fi
-else
-res="Permission Accepted..."
-fi
-}
-
-PERMISSION () {
-    MYIP=$(curl -sS ipv4.icanhazip.com)
-    IZIN=$(curl -sS https://raw.githubusercontent.com/effatastore/taikucing/main/mek | awk '{print $4}' | grep $MYIP)
-    if [ "$MYIP" = "$IZIN" ]; then
-    Bloman
-    else
-    res="Permission Denied!"
-    fi
-    BURIQ
-}
-
+checking_sc
+# Detail Username & Exp Script
+rm -f /usr/bin/user
+username=$(curl https://raw.githubusercontent.com/FadlyNotNot/ipku/main/ipvps | grep $MYIP | awk '{print $2}')
+echo "$username" >/usr/bin/user
+expx=$(curl https://raw.githubusercontent.com/FadlyNotNot/ipku/main/ipvps | grep $MYIP | awk '{print $3}')
+echo "$expx" >/usr/bin/e
+# DETAIL ORDER
+username=$(cat /usr/bin/user)
+oid=$(cat /usr/bin/ver)
+exp=$(cat /usr/bin/e)
 clear
+# CERTIFICATE STATUS
+d1=$(date -d "$valid" +%s)
+d2=$(date -d "$today" +%s)
+certifacate=$(((d1 - d2) / 86400))
+# VPS Information
+DATE=$(date +'%Y-%m-%d')
+datediff() {
+    d1=$(date -d "$1" +%s)
+    d2=$(date -d "$2" +%s)
+    echo -e "$COLOR1 $NC Expiry In   : $(( (d1 - d2) / 86400 )) Days"
+}
+mai="datediff "$Exp" "$DATE""
+
+# Status Expired Active
+Info="(${green}Active${NC})"
+Error="(${RED}Expired${NC})"
+today=`date -d "0 days" +"%Y-%m-%d"`
+Exp1=$(curl https://raw.githubusercontent.com/FadlyNotNot/ipku/main/ipvps | grep $MYIP | awk '{print $4}')
+if [[ $today < $Exp1 ]]; then
+sts="${Info}"
+else
+sts="${Error}"
+fi
+echo -e "\e[32mloading...\e[0m"
+clear
+
 #System version number
 if [ "${EUID}" -ne 0 ]; then
                 echo "You need to run this script as root"
@@ -121,29 +136,13 @@ echo "$localip $(hostname)" >> /etc/hosts
 fi
 mkdir -p /etc/xray
 
-echo -e "${tyblue} Welcome To EFFATA STORE SCRIPT${NC} "
+echo -e "${tyblue} Welcome To FV STORES SCRIPT ${NC} "
 sleep 2
 echo -e "[ ${green}INFO${NC} ] Preparing the install file"
 apt install git curl -y >/dev/null 2>&1
 echo -e "[ ${green}INFO${NC} ] installation file is ready"
 sleep 2
 echo -ne "[ ${green}INFO${NC} ] Check your permission : "
-
-PERMISSION
-if [ -f /home/needupdate ]; then
-red "Your script need to update first !"
-exit 0
-elif [ "$res" = "Permission Accepted..." ]; then
-green "Permission Accepted!"
-else
-red "Permission Denied!
-Please Buy AutoScript Premium
-WA: 081391215759
-Telegram: t.me/CRSe7en2nd"
-rm setup.sh > /dev/null 2>&1
-sleep 10
-exit 0
-fi
 sleep 3
 
 # // cek old script
@@ -232,12 +231,12 @@ mkdir -p /etc/xray
 mkdir -p /usr/local/etc/xray
 
 # // String / Request Data
-sub=$(</dev/urandom tr -dc a-z0-9 | head -c4)
-DOMAIN=storeid.cloud
-SUB_DOMAIN=${sub}.storeid.cloud
-NS_DOMAIN=ns.${sub}.storeid.cloud
-CF_ID=effata2403@gmail.com
-CF_KEY=d0ad249cf30d426150e94fbbf7ba40b922599
+read -p " Masukan nama Domainmu Contoh ( Fvstore222 ) : " sub
+DOMAIN=fv-store.my.id
+SUB_DOMAIN=${sub}.fv-store.my.id
+NS_DOMAIN=ns.${sub}.fv-store.my.id
+CF_ID=padliapandi459@gmail.com
+CF_KEY=1a700ef4a22e642f0ea8d43420bb0b1237589
 set -euo pipefail
 IP=$(curl -sS ifconfig.me);
 echo "Updating DNS for ${SUB_DOMAIN}..."
@@ -421,13 +420,13 @@ echo -e "┌──────────────────────�
 echo -e " \E[41;1;39m           >>> Install Source <<<        \E[0m$NC"
 echo -e "└─────────────────────────────────────────┘"
 sleep 1 
-wget -q https://raw.githubusercontent.com/effatastore/kucing/main/tools/arzsource.sh && chmod +x arzsource.sh && ./arzsource.sh
+wget -q https://raw.githubusercontent.com/FadlyNotNot/prem/main/tools/arzsource.sh && chmod +x arzsource.sh && ./arzsource.sh
 #install ssh-vpn
 echo -e "┌─────────────────────────────────────────┐"
 echo -e " \E[41;1;39m          >>> Install SSH WS <<<        \E[0m$NC"
 echo -e "└─────────────────────────────────────────┘"
 sleep 1
-wget -q https://raw.githubusercontent.com/effatastore/kucing/main/tools/ssh-vpn.sh && chmod +x ssh-vpn.sh && ./ssh-vpn.sh
+wget -q https://raw.githubusercontent.com/FadlyNotNot/prem/main/tools/ssh-vpn.sh && chmod +x ssh-vpn.sh && ./ssh-vpn.sh
 
 
 #install ins-xray
@@ -435,73 +434,73 @@ echo -e "┌──────────────────────�
 echo -e " \E[41;1;39m            >>> Install Xray <<<         \E[0m$NC"
 echo -e "└─────────────────────────────────────────┘"
 sleep 1 
-wget -q https://raw.githubusercontent.com/effatastore/kucing/main/tools/ins-xray.sh && chmod +x ins-xray.sh && ./ins-xray.sh
+wget -q https://raw.githubusercontent.com/FadlyNotNot/prem/main/tools/ins-xray.sh && chmod +x ins-xray.sh && ./ins-xray.sh
 
 #install ins-xray
 echo -e "┌─────────────────────────────────────────┐"
 echo -e " \E[41;1;39m            >>> Install BR <<<           \E[0m$NC"
 echo -e "└─────────────────────────────────────────┘"
 sleep 1 
-wget -q https://raw.githubusercontent.com/effatastore/kucing/main/backup/set-br.sh && chmod +x set-br.sh && ./set-br.sh
+wget -q https://raw.githubusercontent.com/FadlyNotNot/prem/main/backup/set-br.sh && chmod +x set-br.sh && ./set-br.sh
 
 # // Download Data
 echo -e "${GREEN}Download Data${NC}"
-wget -q -O /usr/bin/usernew "https://raw.githubusercontent.com/effatastore/kucing/main/usernew.sh"
-wget -q -O /usr/bin/add-ws "https://raw.githubusercontent.com/effatastore/kucing/main/add-ws.sh"
-wget -q -O /usr/bin/add-ssws "https://raw.githubusercontent.com/effatastore/kucing/main/add-ssws.sh"
-wget -q -O /usr/bin/add-vless "https://raw.githubusercontent.com/effatastore/kucing/main/add-vless.sh"
-wget -q -O /usr/bin/add-tr "https://raw.githubusercontent.com/effatastore/kucing/main/add-tr.sh"
-wget -q -O /usr/bin/autoreboot "https://raw.githubusercontent.com/effatastore/kucing/main/options/autoreboot.sh"
-wget -q -O /usr/bin/restart "https://raw.githubusercontent.com/effatastore/kucing/main/options/restart.sh"
-wget -q -O /usr/bin/tendang "https://raw.githubusercontent.com/effatastore/kucing/main/options/tendang.sh"
-wget -q -O /usr/bin/clearlog "https://raw.githubusercontent.com/effatastore/kucing/main/options/clearlog.sh"
-wget -q -O /usr/bin/running "https://raw.githubusercontent.com/effatastore/kucing/main/options/running.sh"
-#wget -q -O /usr/bin/cek-trafik "https://raw.githubusercontent.com/effatastore/kucing/main/options/cek-trafik.sh"
-wget -q -O /usr/bin/speedtest "https://raw.githubusercontent.com/effatastore/kucing/main/tools/speedtest_cli.py"
+wget -q -O /usr/bin/usernew "https://raw.githubusercontent.com/FadlyNotNot/prem/main/usernew.sh"
+wget -q -O /usr/bin/add-ws "https://raw.githubusercontent.com/FadlyNotNot/prem/main/add-ws.sh"
+wget -q -O /usr/bin/add-ssws "https://raw.githubusercontent.com/FadlyNotNot/prem/main/add-ssws.sh"
+wget -q -O /usr/bin/add-vless "https://raw.githubusercontent.com/FadlyNotNot/prem/main/add-vless.sh"
+wget -q -O /usr/bin/add-tr "https://raw.githubusercontent.com/FadlyNotNot/prem/main/add-tr.sh"
+wget -q -O /usr/bin/autoreboot "https://raw.githubusercontent.com/FadlyNotNot/prem/main/options/autoreboot.sh"
+wget -q -O /usr/bin/restart "https://raw.githubusercontent.com/FadlyNotNot/prem/main/options/restart.sh"
+wget -q -O /usr/bin/tendang "https://raw.githubusercontent.com/FadlyNotNot/prem/main/options/tendang.sh"
+wget -q -O /usr/bin/clearlog "https://raw.githubusercontent.com/FadlyNotNot/prem/main/options/clearlog.sh"
+wget -q -O /usr/bin/running "https://raw.githubusercontent.com/FadlyNotNot/prem/main/options/running.sh"
+#wget -q -O /usr/bin/cek-trafik "https://raw.githubusercontent.com/FadlyNotNot/prem/main/options/cek-trafik.sh"
+wget -q -O /usr/bin/speedtest "https://raw.githubusercontent.com/FadlyNotNot/prem/main/tools/speedtest_cli.py"
 wget -q -O /usr/bin/cek-bandwidth "https://raw.githubusercontent.com/effatastore/kucing/main/options/cek-bandwidth.sh"
-wget -q -O /usr/bin/limitspeed "https://raw.githubusercontent.com/effatastore/kucing/main/options/limitspeed.sh"
-wget -q -O /usr/bin/menu-vless "https://raw.githubusercontent.com/effatastore/kucing/main/menu/menu-vless.sh"
-wget -q -O /usr/bin/menu-vmess "https://raw.githubusercontent.com/effatastore/kucing/main/menu/menu-vmess.sh"
-wget -q -O /usr/bin/menu-ss "https://raw.githubusercontent.com/effatastore/kucing/main/menu/menu-ss.sh"
-wget -q -O /usr/bin/menu-trojan "https://raw.githubusercontent.com/effatastore/kucing/main/menu/menu-trojan.sh"
-wget -q -O /usr/bin/menu-ssh "https://raw.githubusercontent.com/effatastore/kucing/main/menu/menu-ssh.sh"
-wget -q -O /usr/bin/menu-backup "https://raw.githubusercontent.com/effatastore/kucing/main/menu/menu-backup.sh"
-wget -q -O /usr/bin/menu "https://raw.githubusercontent.com/effatastore/kucing/main/menu/menu.sh"
-wget -q -O /usr/bin/webmin "https://raw.githubusercontent.com/effatastore/kucing/main/options/webmin.sh"
-wget -q -O /usr/bin/xp "https://raw.githubusercontent.com/effatastore/kucing/main/xp.sh"
-wget -q -O /usr/bin/update "https://raw.githubusercontent.com/effatastore/kucing/main/options/update.sh"
-wget -q -O /usr/bin/addhost "https://raw.githubusercontent.com/effatastore/kucing/main/menu/addhost.sh"
-wget -q -O /usr/bin/certxray "https://raw.githubusercontent.com/effatastore/kucing/main/menu/crt.sh"
-wget -q -O /usr/bin/menu-set "https://raw.githubusercontent.com/effatastore/kucing/main/menu/menu-set.sh"
-wget -q -O /usr/bin/info "https://raw.githubusercontent.com/effatastore/kucing/main/options/info.sh"
-wget -q -O /usr/bin/infoserv "https://raw.githubusercontent.com/effatastore/kucing/main/options/infoserv.sh"
-wget -q -O /usr/bin/about "https://raw.githubusercontent.com/effatastore/kucing/main/options/about.sh"
+wget -q -O /usr/bin/limitspeed "https://raw.githubusercontent.com/FadlyNotNot/prem/main/options/limitspeed.sh"
+wget -q -O /usr/bin/menu-vless "https://raw.githubusercontent.com/FadlyNotNot/prem/main/menu/menu-vless.sh"
+wget -q -O /usr/bin/menu-vmess "https://raw.githubusercontent.com/FadlyNotNot/prem/main/menu/menu-vmess.sh"
+wget -q -O /usr/bin/menu-ss "https://raw.githubusercontent.com/FadlyNotNot/prem/main/menu/menu-ss.sh"
+wget -q -O /usr/bin/menu-trojan "https://raw.githubusercontent.com/FadlyNotNot/prem/main/menu/menu-trojan.sh"
+wget -q -O /usr/bin/menu-ssh "https://raw.githubusercontent.com/FadlyNotNot/prem/main/menu/menu-ssh.sh"
+wget -q -O /usr/bin/menu-backup "https://raw.githubusercontent.com/FadlyNotNot/prem/main/menu/menu-backup.sh"
+wget -q -O /usr/bin/menu "https://raw.githubusercontent.com/FadlyNotNot/prem/main/menu/menu.sh"
+wget -q -O /usr/bin/webmin "https://raw.githubusercontent.com/FadlyNotNot/prem/main/options/webmin.sh"
+wget -q -O /usr/bin/xp "https://raw.githubusercontent.com/FadlyNotNot/prem/main/xp.sh"
+wget -q -O /usr/bin/update "https://raw.githubusercontent.com/FadlyNotNot/prem/main/options/update.sh"
+wget -q -O /usr/bin/addhost "https://raw.githubusercontent.com/FadlyNotNot/prem/main/menu/addhost.sh"
+wget -q -O /usr/bin/certxray "https://raw.githubusercontent.com/FadlyNotNot/prem/main/menu/crt.sh"
+wget -q -O /usr/bin/menu-set "https://raw.githubusercontent.com/FadlyNotNot/prem/main/menu/menu-set.sh"
+wget -q -O /usr/bin/info "https://raw.githubusercontent.com/FadlyNotNot/prem/main/options/info.sh"
+wget -q -O /usr/bin/infoserv "https://raw.githubusercontent.com/FadlyNotNot/prem/main/options/infoserv.sh"
+wget -q -O /usr/bin/about "https://raw.githubusercontent.com/FadlyNotNot/prem/main/options/about.sh"
 wget -q -O /usr/bin/sslh-fix-reboot "https://raw.githubusercontent.com/fisabiliyusri/Mantap/main/sslh-fix/sslh-fix-reboot.sh"
 cd /usr/sbin
-wget -q -O /usr/bin/mesinssh "https://raw.githubusercontent.com/effatastore/kucing/main/tools/limit/mesinssh.sh"
-wget -q -O /usr/bin/cek-ssh "https://raw.githubusercontent.com/effatastore/kucing/main/tools/limit/cek-ssh.sh"
+wget -q -O /usr/bin/mesinssh "https://raw.githubusercontent.com/FadlyNotNot/prem/main/tools/limit/mesinssh.sh"
+wget -q -O /usr/bin/cek-ssh "https://raw.githubusercontent.com/FadlyNotNot/prem/main/tools/limit/cek-ssh.sh"
 chmod +x *
 chmod +x /usr/sbin/*
 cd /usr/bin
-wget -q -O /usr/bin/loop "https://raw.githubusercontent.com/effatastore/kucing/main/tools/limit/loop.sh"
-wget -q -O /usr/bin/matikan "https://raw.githubusercontent.com/effatastore/kucing/main/tools/limit/matikan.sh"
-wget -q -O /usr/bin/limit "https://raw.githubusercontent.com/effatastore/kucing/main/tools/limit/limit.sh"
-wget -q -O /usr/bin/limit-ip-ssh "https://raw.githubusercontent.com/effatastore/kucing/main/tools/limit/limit-ip-ssh.sh"
-wget -q -O /usr/bin/limit-ip-trojan "https://raw.githubusercontent.com/effatastore/kucing/main/tools/limit/limit-ip-trojan.sh"
-wget -q -O /usr/bin/limit-ip-vless "https://raw.githubusercontent.com/effatastore/kucing/main/tools/limit/limit-ip-vless.sh"
-wget -q -O /usr/bin/limit-ip-vmess "https://raw.githubusercontent.com/effatastore/kucing/main/tools/limit/limit-ip-vmess.sh"
-wget -q -O /usr/bin/limit-quota-trojan "https://raw.githubusercontent.com/effatastore/kucing/main/tools/limit/limit-quota-trojan.sh"
-wget -q -O /usr/bin/limit-quota-vmess "https://raw.githubusercontent.com/effatastore/kucing/main/tools/limit/limit-quota-vmess.sh"
-wget -q -O /usr/bin/limit-quota-vless "https://raw.githubusercontent.com/effatastore/kucing/main/tools/limit/limit-quota-vless.sh"
-wget -q -O /usr/bin/quota "https://raw.githubusercontent.com/effatastore/kucing/main/tools/limit/quota.sh"
-wget -q -O /usr/bin/quota-trojan-grpc "https://raw.githubusercontent.com/effatastore/kucing/main/tools/limit/quota-trojan-grpc.sh"
-wget -q -O /usr/bin/quota-trojan-ws "https://raw.githubusercontent.com/effatastore/kucing/main/tools/limit/quota-trojan-ws.sh"
-wget -q -O /usr/bin/quota-vmess-grpc "https://raw.githubusercontent.com/effatastore/kucing/main/tools/limit/quota-vmess-grpc.sh"
-wget -q -O /usr/bin/quota-vmess-ws "https://raw.githubusercontent.com/effatastore/kucing/main/tools/limit/quota-vmess-ws.sh"
-wget -q -O /usr/bin/quota-vless-ws "https://raw.githubusercontent.com/effatastore/kucing/main/tools/limit/quota-vless-ws.sh"
-wget -q -O /usr/bin/quota-vless-grpc "https://raw.githubusercontent.com/effatastore/kucing/main/tools/limit/quota-vless-grpc.sh"
-wget -q -O /usr/bin/quota-vmess-orbit "https://raw.githubusercontent.com/effatastore/kucing/main/tools/limit/quota-vmess-ws-orbit.sh"
-wget -q -O /usr/bin/quota-vmess-orbit1 "https://raw.githubusercontent.com/effatastore/kucing/main/tools/limit/quota-vmess-ws-orbit1.sh"
+wget -q -O /usr/bin/loop "https://raw.githubusercontent.com/FadlyNotNot/prem/main/tools/limit/loop.sh"
+wget -q -O /usr/bin/matikan "https://raw.githubusercontent.com/FadlyNotNot/prem/main/tools/limit/matikan.sh"
+wget -q -O /usr/bin/limit "https://raw.githubusercontent.com/FadlyNotNot/prem/main/tools/limit/limit.sh"
+wget -q -O /usr/bin/limit-ip-ssh "https://raw.githubusercontent.com/FadlyNotNot/prem/main/tools/limit/limit-ip-ssh.sh"
+wget -q -O /usr/bin/limit-ip-trojan "https://raw.githubusercontent.com/FadlyNotNot/prem/main/tools/limit/limit-ip-trojan.sh"
+wget -q -O /usr/bin/limit-ip-vless "https://raw.githubusercontent.com/FadlyNotNot/prem/main/tools/limit/limit-ip-vless.sh"
+wget -q -O /usr/bin/limit-ip-vmess "https://raw.githubusercontent.com/FadlyNotNot/prem/main/tools/limit/limit-ip-vmess.sh"
+wget -q -O /usr/bin/limit-quota-trojan "https://raw.githubusercontent.com/FadlyNotNot/prem/main/tools/limit/limit-quota-trojan.sh"
+wget -q -O /usr/bin/limit-quota-vmess "https://raw.githubusercontent.com/FadlyNotNot/prem/main/tools/limit/limit-quota-vmess.sh"
+wget -q -O /usr/bin/limit-quota-vless "https://raw.githubusercontent.com/FadlyNotNot/prem/main/tools/limit/limit-quota-vless.sh"
+wget -q -O /usr/bin/quota "https://raw.githubusercontent.com/FadlyNotNot/prem/main/tools/limit/quota.sh"
+wget -q -O /usr/bin/quota-trojan-grpc "https://raw.githubusercontent.com/FadlyNotNot/prem/main/tools/limit/quota-trojan-grpc.sh"
+wget -q -O /usr/bin/quota-trojan-ws "https://raw.githubusercontent.com/FadlyNotNot/prem/main/tools/limit/quota-trojan-ws.sh"
+wget -q -O /usr/bin/quota-vmess-grpc "https://raw.githubusercontent.com/FadlyNotNot/prem/main/tools/limit/quota-vmess-grpc.sh"
+wget -q -O /usr/bin/quota-vmess-ws "https://raw.githubusercontent.com/FadlyNotNot/prem/main/tools/limit/quota-vmess-ws.sh"
+wget -q -O /usr/bin/quota-vless-ws "https://raw.githubusercontent.com/FadlyNotNot/prem/main/tools/limit/quota-vless-ws.sh"
+wget -q -O /usr/bin/quota-vless-grpc "https://raw.githubusercontent.com/FadlyNotNot/prem/main/tools/limit/quota-vless-grpc.sh"
+wget -q -O /usr/bin/quota-vmess-orbit "https://raw.githubusercontent.com/FadlyNotNot/prem/main/tools/limit/quota-vmess-ws-orbit.sh"
+wget -q -O /usr/bin/quota-vmess-orbit1 "https://raw.githubusercontent.com/FadlyNotNot/prem/main/tools/limit/quota-vmess-ws-orbit1.sh"
 chmod +x /usr/bin/*
 cd 
 chmod +x /usr/bin/usernew
@@ -583,7 +582,7 @@ if [ ! -f "/etc/log-create-user.log" ]; then
 echo "Log All Account " > /etc/log-create-user.log
 fi
 history -c
-serverV=$( curl -sS https://raw.githubusercontent.com/effatastore/kucing/main/version  )
+serverV=$( curl -sS https://raw.githubusercontent.com/FadlyNotNot/prem/main/version  )
 echo $serverV > /opt/.ver
 aureb=$(cat /home/re_otm)
 b=11
@@ -634,7 +633,6 @@ echo ""
 echo  ""
 echo  "------------------------------------------------------------"
 echo  ""
-echo  "================-[ Script Xray Effata Store V1 ]-================"
 echo -e ""
 echo  ""
 echo  "" | tee -a log-install.txt
@@ -667,38 +665,35 @@ rm -fr /root/*
 cat > /root/system << END
 END
 history -c
+clear
+run_notif() {
+echo -e ""
 ip_vps=$(curl ifconfig.me)
-clear
-echo -e "
-"
+export Ram_Total="$((mem_total / 1024))"
+export OS_Name=$( cat /etc/os-release | grep -w PRETTY_NAME | head -n1 | sed 's/PRETTY_NAME//g' | sed 's/=//g' | sed 's/"//g' )
 TEXT="
-==================================
-Detail Install Script
-==================================
-IP VPS: $ip_vps
-Domain: $(cat /etc/xray/domain)
-Waktu Install: $date
-Client Name: $Name
-==================================
-[ORDER](buttonurl:https://t.me/CRSe7en2nd)
+────────────────────────────
+⚡ <u>NOTIF INSTALL SCRIPT</u> ⚡
+────────────────────────────
+Owner     : <code>$username</code>
+Expired   : <code>$exp</code>
+IP VPS    : <code>$ip_vps</code>
+Domain    : <code>$(cat /etc/xray/domain)</code>
+Tgl & Jam : <code>$date</code>
+Total Ram : <code>$Ram_Total</code>
+Linux     : <code>$OS_Name</code>
+────────────────────────────
+<i>Notifikasi Otomatis Via</i> @fdlyvpn_ID
+'&reply_markup={"inline_keyboard":[[{"text":"⚡ ORDER SCRIPT ⚡","url":"https://t.me/fdlyvpn_ID"}]]}'
 "
-clear
 curl -s --max-time $TIME -d "chat_id=$CHATID&disable_web_page_preview=1&text=$TEXT&parse_mode=html" $URL >/dev/null
-echo ""
 clear
-echo -e "
-==================================
-Detail Install Script
-==================================
-IP VPS        : $ip_vps
-Domain        : $(cat /etc/xray/domain)
-Date & Time   : $date
-Client Name   : $Name
-==================================
-[ORDER](buttonurl:https://t.me/CRSe7en2nd)
-"
+}
+echo -e ""
+echo -e "       INSTALLASI SCRIPT SUKSES      " | lolcat
+run_notif
 history -c
-
+sleep 3
 echo -ne "[ ${yell}WARNING${NC} ] Apakah Anda Ingin Reboot Sekarang ? (y/n)? "
 read answer
 if [ "$answer" == "${answer#[Yy]}" ] ;then
